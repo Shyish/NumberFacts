@@ -1,0 +1,14 @@
+<resources>
+
+    <style name="Theme.Nfstyle" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/ActionBar.Solid.Nfstyle</item>
+
+        <!-- Light.DarkActionBar specific -->
+    </style>
+
+    <style name="ActionBar.Solid.Nfstyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/ab_solid_nfstyle</item>
+        <item name="backgroundSplit">@drawable/ab_bottom_solid_nfstyle</item>
+    </style>
+
+</resources>

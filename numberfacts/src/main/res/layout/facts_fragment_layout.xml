@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.zdvdev.numberfacts.activity.MainActivity$PlaceholderFragment">
+
+    <TextView
+        android:id="@+id/factsfragment_number_label"
+        android:text="@string/number_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="21sp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" />
+
+    <EditText
+        android:id="@+id/factsfragment_number_edittext"
+        android:hint="@string/number_hint"
+        android:inputType="numberDecimal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/factsfragment_getfact_button"
+        android:layout_alignBottom="@+id/factsfragment_getfact_button"
+        android:layout_alignTop="@+id/factsfragment_getfact_button" />
+
+    <Button
+        android:id="@+id/factsfragment_getfact_button"
+        android:text="@string/getfact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/factsfragment_number_label"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:id="@+id/factsfragment_fact_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp"/>
+
+</RelativeLayout>

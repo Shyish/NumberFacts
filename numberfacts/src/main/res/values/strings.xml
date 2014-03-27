@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NumberFacts</string>
+
+    <string name="empty_fact"><![CDATA[<Press below for fact>]]></string>
+    <string name="getfact">Get fact!</string>
+    <string name="number_hint">(leave blank for random fact)</string>
+    <string name="number_label">Type a number</string>
+
+</resources>
