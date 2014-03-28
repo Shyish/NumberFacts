@@ -2,10 +2,19 @@
 <resources>
 
     <string name="app_name">NumberFacts</string>
+    <string name="app_name_first">NUMBER</string>
+    <string name="app_name_second">FACTS</string>
 
-    <string name="empty_fact"><![CDATA[<Press below for fact>]]></string>
-    <string name="getfact">Get fact!</string>
-    <string name="number_hint">(leave blank for random fact)</string>
-    <string name="number_label">Type a number</string>
+    <string name="fact_label">Select the fact type:</string>
+    <string name="write_number">Write a number (optional)</string>
+
+    <string name="get_fact">Get fact!</string>
+    <string name="random_fact">Random fact!</string>
+
+    <string name="error_internet">No internet connection!</string>
+    <string name="type_trivia">Trivia</string>
+    <string name="type_math">Math</string>
+    <string name="type_date">Date</string>
+    <string name="type_year">Year</string>
 
 </resources>

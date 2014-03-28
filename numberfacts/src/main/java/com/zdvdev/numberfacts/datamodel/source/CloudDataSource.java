@@ -5,6 +5,7 @@ import com.zdvdev.numberfacts.async.CustomObserver;
 import com.zdvdev.numberfacts.async.CustomSubscription;
 import com.zdvdev.numberfacts.async.OnJobStatusChangedListener;
 import com.zdvdev.numberfacts.async.Subscription;
+import com.zdvdev.numberfacts.datamodel.model.ResponseFact;
 import retrofit.RestAdapter;
 import retrofit.http.GET;
 import retrofit.http.Path;
@@ -20,21 +21,23 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class CloudDataSource {
 	// The base API endpoint.
-	private static final String SERVER_URL = "http://numbersapi.com/";
+	private static final String SERVER_URL = "http://numbersapi.com";
 
 	// Url params
 	static final String PARAM_NUMBER = "number";
 	static final String PARAM_MONTH = "month";
 	static final String PARAM_DAY = "day";
 
-	// API methods
-	static final String URI_GET_MATH = '{' + PARAM_NUMBER + "}/math";
-	static final String URI_GET_TRIVIA = '{' + PARAM_NUMBER + "}/trivia";
-	static final String URI_GET_DATE = '{' + PARAM_MONTH + "}/{" + PARAM_DAY + "}/date";
-	static final String URI_GET_DATE_DAYS = '{' + PARAM_NUMBER + "}/date";
-	static final String URI_GET_YEAR = '{' + PARAM_NUMBER + "}/year";
+	static final String FORMAT = "?json";
 
-	//TODO add NOTFOUND options (floor/ceil)
+	// API methods
+	static final String URI_GET_MATH = "/{" + PARAM_NUMBER + "}/math" + FORMAT;
+	static final String URI_GET_TRIVIA = "/{" + PARAM_NUMBER + "}/trivia" + FORMAT;
+	static final String URI_GET_DATE = "/{" + PARAM_MONTH + "}/{" + PARAM_DAY + "}/date" + FORMAT;
+	static final String URI_GET_DATE_DAYS = "/{" + PARAM_NUMBER + "}/date" + FORMAT;
+	static final String URI_GET_YEAR = "/{" + PARAM_NUMBER + "}/year" + FORMAT;
+
+	//TODO add NOTFOUND options (floor/ceil)?
 	//TODO add min/max params?
 
 	private static RestAdapter mRestAdapter;
@@ -55,22 +58,26 @@ public class CloudDataSource {
 	}
 
 	public interface ApiManagerService {
-		@GET(URI_GET_MATH) Observable<String> getMathFact(@Path(PARAM_NUMBER) String number);
+		@GET(URI_GET_MATH) Observable<ResponseFact> getMathFact(@Path(PARAM_NUMBER) String number);
 
-		@GET(URI_GET_TRIVIA) Observable<String> getTriviaFact(@Path(PARAM_NUMBER) String number);
+		@GET(URI_GET_TRIVIA) Observable<ResponseFact> getTriviaFact(@Path(PARAM_NUMBER) String number);
 
-		@GET(URI_GET_YEAR) Observable<String> getYearFact(@Path(PARAM_NUMBER) String number);
+		@GET(URI_GET_YEAR) Observable<ResponseFact> getYearFact(@Path(PARAM_NUMBER) String number);
 
-		@GET(URI_GET_DATE) Observable<String> getDateDaysFact(@Path(PARAM_MONTH) String number);
+		@GET(URI_GET_DATE_DAYS) Observable<ResponseFact> getDateDaysFact(@Path(PARAM_NUMBER) String number);
 
-		@GET(URI_GET_DATE) Observable<String> getDateFact(@Path(PARAM_MONTH) Integer month, @Path(PARAM_DAY) Integer day);
+		@GET(URI_GET_DATE) Observable<ResponseFact> getDateFact(@Path(PARAM_MONTH) String month, @Path(PARAM_DAY) String day);
 	}
 
 	/**
 	 * Generic method to make requests
-	 * @param fragment The calling fragment (to avoid responses when the fragment is being dettached/destroyed)
-	 * @param listener Response listener
-	 * @param sourceObservable The #ApiManagerService method to call
+	 *
+	 * @param fragment
+	 * 		The calling fragment (to avoid responses when the fragment is being dettached/destroyed)
+	 * @param listener
+	 * 		Response listener
+	 * @param sourceObservable
+	 * 		The #ApiManagerService method to call
 	 */
 	public static <T> Subscription requestFromFragmentForObserver(Fragment fragment, OnJobStatusChangedListener<T> listener,
 																  Observable<T> sourceObservable) {

@@ -4,9 +4,12 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import com.zdvdev.numberfacts.async.OnJobStatusChangedListener;
 import com.zdvdev.numberfacts.async.Subscription;
+import com.zdvdev.numberfacts.datamodel.model.FactType;
+import com.zdvdev.numberfacts.datamodel.model.ResponseFact;
 import com.zdvdev.numberfacts.datamodel.source.CacheDataSource;
 import com.zdvdev.numberfacts.datamodel.source.CacheDataSource.CachedOnJobFinishedListenerWrapper;
 import com.zdvdev.numberfacts.datamodel.source.CloudDataSource;
+import rx.Observable;
 
 /**
  * Created with Android Studio.
@@ -17,84 +20,51 @@ import com.zdvdev.numberfacts.datamodel.source.CloudDataSource;
 @SuppressWarnings("unchecked")
 public class DataManager {
 
-	private static final String MATH_CACHE_SUFFIX = "_math";
-	private static final String TRIVIA_CACHE_SUFFIX = "_trivia";
-	private static final String YEAR_CACHE_SUFFIX = "_year";
-	private static final String DATE_DAYS_CACHE_SUFFIX = "_date_days";
-	private static final String DATE_CACHE_SUFFIX = "_date";
-
 	private static final String NUMBER_RANDOM = "random";
 
-	public static Subscription getMathFact(String number, Fragment fragment, final OnJobStatusChangedListener<String> listener) {
+	/**
+	 * Generic method to obtain a fact of any kind for the given number
+	 * @param number The number (or date) to process
+	 * @param fragment Calling fragment (for sync stuff)
+	 * @param listener The listener to give the result
+	 * @param type Fact type
+	 * @return A subscription to the call
+	 */
+	public static Subscription getFact(String number, Fragment fragment, final OnJobStatusChangedListener<ResponseFact> listener, FactType type) {
 		if (TextUtils.isEmpty(number)) number = NUMBER_RANDOM;
-		String cacheTag = number + MATH_CACHE_SUFFIX;
-		String fact;
+		String cacheTag = number + type.name();
+		ResponseFact fact;
 
-		if ((fact = (String) CacheDataSource.get(cacheTag)) != null) {
+		if (!number.equals(NUMBER_RANDOM) && (fact = (ResponseFact) CacheDataSource.get(cacheTag)) != null) {
 			listener.onCompleted(fact);
 			return null;
 		}
 
-		CachedOnJobFinishedListenerWrapper wrappedListener = new CachedOnJobFinishedListenerWrapper<String>(cacheTag, listener);
+		CachedOnJobFinishedListenerWrapper wrappedListener = new CachedOnJobFinishedListenerWrapper<ResponseFact>(cacheTag, listener);
 
-		return CloudDataSource.requestFromFragmentForObserver(fragment, wrappedListener, CloudDataSource.getApiManager().getMathFact(number));
-	}
+		Observable<ResponseFact> apiMethod;
 
-	public static Subscription getTriviaFact(String number, Fragment fragment, final OnJobStatusChangedListener<String> listener) {
-		if (TextUtils.isEmpty(number)) number = NUMBER_RANDOM;
-		String cacheTag = number + TRIVIA_CACHE_SUFFIX;
-		String fact;
-
-		if ((fact = (String) CacheDataSource.get(cacheTag)) != null) {
-			listener.onCompleted(fact);
-			return null;
+		switch (type) {
+			case MATH:
+				apiMethod = CloudDataSource.getApiManager().getMathFact(number);
+				break;
+			case DATE:
+				if (number.contains("/")) {
+					String[] dateSplit = number.split("\\/");
+					apiMethod = CloudDataSource.getApiManager().getDateFact(dateSplit[0], dateSplit[1]);
+				} else {
+					apiMethod = CloudDataSource.getApiManager().getDateDaysFact(number);
+				}
+				break;
+			case YEAR:
+				apiMethod = CloudDataSource.getApiManager().getYearFact(number);
+				break;
+			case TRIVIA:
+			default:
+				apiMethod = CloudDataSource.getApiManager().getTriviaFact(number);
+				break;
 		}
 
-		CachedOnJobFinishedListenerWrapper wrappedListener = new CachedOnJobFinishedListenerWrapper<String>(cacheTag, listener);
-
-		return CloudDataSource.requestFromFragmentForObserver(fragment, wrappedListener, CloudDataSource.getApiManager().getTriviaFact(number));
-	}
-
-	public static Subscription getYearFact(String number, Fragment fragment, final OnJobStatusChangedListener<String> listener) {
-		if (TextUtils.isEmpty(number)) number = NUMBER_RANDOM;
-		String cacheTag = number + YEAR_CACHE_SUFFIX;
-		String fact;
-
-		if ((fact = (String) CacheDataSource.get(cacheTag)) != null) {
-			listener.onCompleted(fact);
-			return null;
-		}
-
-		CachedOnJobFinishedListenerWrapper wrappedListener = new CachedOnJobFinishedListenerWrapper<String>(cacheTag, listener);
-
-		return CloudDataSource.requestFromFragmentForObserver(fragment, wrappedListener, CloudDataSource.getApiManager().getYearFact(number));
-	}
-
-	public static Subscription getDateDaysFact(String number, Fragment fragment, final OnJobStatusChangedListener<String> listener) {
-		if (TextUtils.isEmpty(number)) number = NUMBER_RANDOM;
-		String cacheTag = number + DATE_DAYS_CACHE_SUFFIX;
-		String fact;
-
-		if ((fact = (String) CacheDataSource.get(cacheTag)) != null) {
-			listener.onCompleted(fact);
-			return null;
-		}
-
-		CachedOnJobFinishedListenerWrapper wrappedListener = new CachedOnJobFinishedListenerWrapper<String>(cacheTag, listener);
-
-		return CloudDataSource.requestFromFragmentForObserver(fragment, wrappedListener, CloudDataSource.getApiManager().getDateDaysFact(number));
-	}
-	public static Subscription getDateFact(Integer month, Integer day, Fragment fragment, final OnJobStatusChangedListener<String> listener) {
-		String cacheTag = month + "/" + day + DATE_CACHE_SUFFIX;
-		String fact;
-
-		if ((fact = (String) CacheDataSource.get(cacheTag)) != null) {
-			listener.onCompleted(fact);
-			return null;
-		}
-
-		CachedOnJobFinishedListenerWrapper wrappedListener = new CachedOnJobFinishedListenerWrapper<String>(cacheTag, listener);
-
-		return CloudDataSource.requestFromFragmentForObserver(fragment, wrappedListener, CloudDataSource.getApiManager().getDateFact(month, day));
+		return CloudDataSource.requestFromFragmentForObserver(fragment, wrappedListener, apiMethod);
 	}
 }
