@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,6 +23,7 @@ import butterknife.OnClick;
 import com.zdvdev.numberfacts.BuildConfig;
 import com.zdvdev.numberfacts.R;
 import com.zdvdev.numberfacts.async.OnJobStatusChangedListener;
+import com.zdvdev.numberfacts.common.Util;
 import com.zdvdev.numberfacts.datamodel.DataManager;
 import com.zdvdev.numberfacts.datamodel.model.FactType;
 import com.zdvdev.numberfacts.datamodel.model.ResponseFact;
@@ -57,6 +59,7 @@ public class FactsFragment extends Fragment
 		super.onViewCreated(view, savedInstanceState);
 
 		typeRadioGroup.setOnCheckedChangeListener(this);
+		typeRadioGroup.check(typeRadioGroup.getChildAt(0).getId());
 
 		numberEditText.setFilters(new InputFilter[] {this});
 		numberEditText.addTextChangedListener(this);
@@ -64,7 +67,11 @@ public class FactsFragment extends Fragment
 
 	@OnClick(R.id.factsfragment_getfact_button) void onGetFactButtonClicked() {
 		String number = numberEditText.getText().toString();
-		DataManager.getFact(number, this, this, currentFact);
+		if (number.contains("/") && !Util.validateMDDate(number)) {
+			numberEditText.setError(getString(R.string.error_date));
+		} else {
+			DataManager.getFact(number, this, this, currentFact);
+		}
 	}
 
 	@OnClick(R.id.factsfragment_share_button) void onShareButtonClicked() {
@@ -83,7 +90,7 @@ public class FactsFragment extends Fragment
 	public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 		for (int k = start; k < end; k++) {
 			char c = source.charAt(k);
-			if (!Character.isDigit(c) || (currentFact == FactType.DATE && c != '/')) {
+			if (!(Character.isDigit(c) || (currentFact == FactType.DATE && c == '/'))) {
 				return "";
 			}
 		}
@@ -120,13 +127,21 @@ public class FactsFragment extends Fragment
 	 * *********************************
 	 */
 	@Override public void onCheckedChanged(RadioGroup group, int checkedId) {
+		// Clear the edittext to avoid invalid chars in other fact types.
+		if (numberEditText.getText().toString().contains("/")) {
+			factTextView.setText("");
+			numberEditText.setText("");
+		}
 		int radioButtonID = group.getCheckedRadioButtonId();
 		View radioButton = group.findViewById(radioButtonID);
 		currentFact = FactType.values()[group.indexOfChild(radioButton)];
 
 		if (currentFact == FactType.DATE) {
-			//TODO
-//			numberEditText.setError("", getResources().getDrawable(R.drawable.));
+			numberEditText.setHint(R.string.write_number_date_hint);
+			numberEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+		} else {
+			numberEditText.setHint(R.string.write_number_hint);
+			numberEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		}
 	}
 

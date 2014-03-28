@@ -6,15 +6,19 @@
     <string name="app_name_second">FACTS</string>
 
     <string name="fact_label">Select the fact type:</string>
-    <string name="write_number">Write a number (optional)</string>
+    <string name="write_number_hint">Write a number*</string>
+    <string name="write_number_date_hint">Write a day or a date [m/d]*</string>
+    <string name="label_optional">*or leave blank for random</string>
 
     <string name="get_fact">Get fact!</string>
     <string name="random_fact">Random fact!</string>
 
-    <string name="error_internet">No internet connection!</string>
     <string name="type_trivia">Trivia</string>
     <string name="type_math">Math</string>
     <string name="type_date">Date</string>
     <string name="type_year">Year</string>
+
+    <string name="error_internet">No internet connection</string>
+    <string name="error_date">Invalid date</string>
 
 </resources>
