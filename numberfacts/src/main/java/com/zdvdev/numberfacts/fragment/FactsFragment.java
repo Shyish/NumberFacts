@@ -1,5 +1,6 @@
 package com.zdvdev.numberfacts.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +77,13 @@ public class FactsFragment extends Fragment
 	}
 
 	@OnClick(R.id.factsfragment_share_button) void onShareButtonClicked() {
-		//TODO share stuff
+		Intent share = new Intent(android.content.Intent.ACTION_SEND);
+
+		share.setType("text/plain");
+		share.putExtra(android.content.Intent.EXTRA_SUBJECT, "Did you know that...?");
+		share.putExtra(android.content.Intent.EXTRA_TEXT, factTextView.getText());
+
+		startActivity(Intent.createChooser(share, "Share this fact"));
 	}
 
 
@@ -83,13 +91,12 @@ public class FactsFragment extends Fragment
 	 * ********************
 	 * InputFilter METHOD *
 	 * ********************
-	 *
-	 * Only allows digits or digits plus the '/' char if the current fact type is DATE
 	 */
 	@Override
 	public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 		for (int k = start; k < end; k++) {
 			char c = source.charAt(k);
+			//Only allows digits or digits plus the '/' char if the current fact type is DATE
 			if (!(Character.isDigit(c) || (currentFact == FactType.DATE && c == '/'))) {
 				return "";
 			}
@@ -112,7 +119,7 @@ public class FactsFragment extends Fragment
 	@Override public void onError(Throwable throwable) {
 		factTextView.setText("");
 		shareButton.setVisibility(View.INVISIBLE);
-		if (throwable instanceof RetrofitError && ((RetrofitError)throwable).isNetworkError()) {
+		if (throwable instanceof RetrofitError && ((RetrofitError) throwable).isNetworkError()) {
 			Toast.makeText(getActivity(), getString(R.string.error_internet), Toast.LENGTH_SHORT).show();
 		} else if (BuildConfig.DEBUG) {
 			numberEditText.setError(throwable.getMessage());

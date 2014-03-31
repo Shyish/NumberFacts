@@ -37,9 +37,6 @@ public class CloudDataSource {
 	static final String URI_GET_DATE_DAYS = "/{" + PARAM_NUMBER + "}/date" + FORMAT;
 	static final String URI_GET_YEAR = "/{" + PARAM_NUMBER + "}/year" + FORMAT;
 
-	//TODO add NOTFOUND options (floor/ceil)?
-	//TODO add min/max params?
-
 	private static RestAdapter mRestAdapter;
 	private static ApiManagerService mApiManager;
 

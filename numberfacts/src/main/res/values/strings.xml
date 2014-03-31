@@ -20,5 +20,6 @@
 
     <string name="error_internet">No internet connection</string>
     <string name="error_date">Invalid date</string>
+    <string name="cd_share">share</string>
 
 </resources>
