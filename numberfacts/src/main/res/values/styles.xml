@@ -3,6 +3,7 @@
 
     <style name="Theme.Nfstyle" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/ActionBar.Solid.Nfstyle</item>
+        <item name="android:windowBackground">@color/blue_light</item>
 
         <!-- Light.DarkActionBar specific -->
     </style>
