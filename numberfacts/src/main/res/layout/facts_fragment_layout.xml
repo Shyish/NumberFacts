@@ -14,7 +14,7 @@
         android:text="@string/fact_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="21sp"
+        android:textSize="@dimen/text_regular"
         android:textColor="@color/blue_dark"
         android:gravity="center_vertical" />
 
@@ -62,6 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="@dimen/text_small"
         android:text="@string/label_optional"
         android:layout_below="@+id/factsfragment_number_edittext"
         android:layout_alignParentRight="true"
@@ -71,7 +72,7 @@
         android:id="@+id/factsfragment_fact_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="@dimen/text_big"
         android:layout_marginBottom="@dimen/default_margin"
         android:textColor="@color/blue_dark"
         tools:text="123546879 is the number of rate of hyperinflation in Zimbabwe by February 2009"
@@ -82,7 +83,7 @@
     <ImageButton
         android:id="@+id/factsfragment_share_button"
         android:layout_alignParentRight="true"
-        android:src="@android:drawable/ic_menu_share"
+        android:src="@drawable/ic_menu_share"
         android:padding="8dp"
         android:layout_marginBottom="@dimen/default_margin"
         style="@style/default_button"
