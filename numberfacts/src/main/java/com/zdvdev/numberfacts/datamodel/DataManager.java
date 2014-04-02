@@ -6,7 +6,6 @@ import com.zdvdev.numberfacts.async.OnJobStatusChangedListener;
 import com.zdvdev.numberfacts.async.Subscription;
 import com.zdvdev.numberfacts.datamodel.model.FactType;
 import com.zdvdev.numberfacts.datamodel.model.ResponseFact;
-import com.zdvdev.numberfacts.datamodel.source.CacheDataSource;
 import com.zdvdev.numberfacts.datamodel.source.CacheDataSource.CachedOnJobFinishedListenerWrapper;
 import com.zdvdev.numberfacts.datamodel.source.CloudDataSource;
 import rx.Observable;
@@ -33,12 +32,13 @@ public class DataManager {
 	public static Subscription getFact(String number, Fragment fragment, final OnJobStatusChangedListener<ResponseFact> listener, FactType type) {
 		if (TextUtils.isEmpty(number)) number = NUMBER_RANDOM;
 		String cacheTag = number + type.name();
-		ResponseFact fact;
+//		ResponseFact fact;
 
-		if (!number.equals(NUMBER_RANDOM) && (fact = (ResponseFact) CacheDataSource.get(cacheTag)) != null) {
-			listener.onCompleted(fact);
-			return null;
-		}
+		// Disabled cache due to existence of facts for same numbers
+//		if (!number.equals(NUMBER_RANDOM) && (fact = (ResponseFact) CacheDataSource.get(cacheTag)) != null) {
+//			listener.onCompleted(fact);
+//			return null;
+//		}
 
 		CachedOnJobFinishedListenerWrapper wrappedListener = new CachedOnJobFinishedListenerWrapper<ResponseFact>(cacheTag, listener);
 

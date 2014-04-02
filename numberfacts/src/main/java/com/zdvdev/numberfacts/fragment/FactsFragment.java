@@ -9,7 +9,6 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,8 @@ import retrofit.RetrofitError;
  */
 public class FactsFragment extends Fragment
 		implements OnJobStatusChangedListener<ResponseFact>, TextWatcher, RadioGroup.OnCheckedChangeListener, InputFilter {
+
+	private static final String PLAY_URL = "http://goo.gl/U1GTpx";
 
 	@InjectView(R.id.factsfragment_number_edittext) EditText numberEditText;
 	@InjectView(R.id.factsfragment_fact_textview) TextView factTextView;
@@ -80,8 +81,11 @@ public class FactsFragment extends Fragment
 		Intent share = new Intent(android.content.Intent.ACTION_SEND);
 
 		share.setType("text/plain");
-		share.putExtra(android.content.Intent.EXTRA_SUBJECT, "Did you know that...?");
-		share.putExtra(android.content.Intent.EXTRA_TEXT, factTextView.getText());
+		share.putExtra(android.content.Intent.EXTRA_SUBJECT, "Take a look at this fact!");
+		share.putExtra(android.content.Intent.EXTRA_TEXT, "Did you know that " + factTextView.getText() + "? (via NumberFacts " + PLAY_URL +
+														  ')');
+
+		//TODO try to compress the text for twitter share(?)
 
 		startActivity(Intent.createChooser(share, "Share this fact"));
 	}
