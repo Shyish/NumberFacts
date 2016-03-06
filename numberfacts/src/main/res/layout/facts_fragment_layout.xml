@@ -10,7 +10,7 @@
     tools:context="com.zdvdev.numberfacts.activity.MainActivity$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/factsfragment_type_label"
+        android:id="@+id/typeLabelTextView"
         android:text="@string/fact_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,10 +19,10 @@
         android:gravity="center_vertical" />
 
     <RadioGroup
-        android:id="@+id/factsfragment_type_group"
+        android:id="@+id/typeRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/factsfragment_type_label"
+        android:layout_below="@+id/typeLabelTextView"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/default_margin">
 
@@ -48,7 +48,7 @@
     </RadioGroup>
 
     <EditText
-        android:id="@+id/factsfragment_number_edittext"
+        android:id="@+id/numberEditText"
         android:hint="@string/write_number_hint"
         android:inputType="numberDecimal"
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
         android:layout_alignParentLeft="true"
         android:textColor="@color/blue_dark"
         android:layout_marginTop="@dimen/default_margin"
-        android:layout_below="@+id/factsfragment_type_group" />
+        android:layout_below="@+id/typeRadioGroup" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -64,12 +64,12 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="@dimen/text_small"
         android:text="@string/label_optional"
-        android:layout_below="@+id/factsfragment_number_edittext"
+        android:layout_below="@+id/numberEditText"
         android:layout_alignParentRight="true"
         android:id="@+id/textView" />
 
     <TextView
-        android:id="@+id/factsfragment_fact_textview"
+        android:id="@+id/factTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_big"
@@ -77,22 +77,22 @@
         android:textColor="@color/blue_dark"
         tools:text="123546879 is the number of rate of hyperinflation in Zimbabwe by February 2009"
         android:gravity="center_vertical"
-        android:layout_above="@+id/factsfragment_share_button"
+        android:layout_above="@+id/shareButton"
         android:layout_below="@+id/textView" />
 
     <ImageButton
-        android:id="@+id/factsfragment_share_button"
+        android:id="@+id/shareButton"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_menu_share"
         android:padding="8dp"
         android:layout_marginBottom="@dimen/default_margin"
         style="@style/default_button"
         android:visibility="invisible"
-        android:layout_above="@+id/factsfragment_getfact_button"
+        android:layout_above="@+id/getFactButton"
         android:contentDescription="@string/cd_share" />
 
     <Button
-        android:id="@+id/factsfragment_getfact_button"
+        android:id="@+id/getFactButton"
         android:text="@string/random_fact"
         style="@style/default_wide_button"
         android:layout_alignParentBottom="true" />

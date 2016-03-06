@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Nfstyle" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.Nfstyle" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="actionBarStyle">@style/ActionBar.Solid.Nfstyle</item>
         <item name="android:windowBackground">@color/blue_light</item>
 
