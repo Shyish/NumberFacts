@@ -1,29 +1,43 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 19
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
         versionCode 2
         versionName "1.1"
     }
-
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt')
-            debuggable false
         }
     }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:+'
-    compile 'com.squareup.retrofit:retrofit:1.3.0'
     compile 'com.jakewharton:butterknife:4.0.1'
-    compile 'com.netflix.rxjava:rxjava-android:0.16.0'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+buildscript {
+    ext.kotlin_version = '1.0.0'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
