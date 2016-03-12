@@ -6,7 +6,7 @@ package com.zdvdev.numberfacts.common
  * @param date date address for validation
  */
 fun validateMDDate(date: String): Boolean {
-    val dateSplit = date.split("\\/")
+    val dateSplit = date.split("\\/".toRegex(), 2)
 
     val month: Int
     val day: Int

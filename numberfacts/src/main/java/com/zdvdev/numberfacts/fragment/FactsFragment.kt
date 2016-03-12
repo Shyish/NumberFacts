@@ -1,12 +1,16 @@
 package com.zdvdev.numberfacts.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.*
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.RadioGroup
 import android.widget.Toast
 import com.zdvdev.numberfacts.BuildConfig
@@ -22,8 +26,7 @@ import rx.schedulers.Schedulers
 /**
  * @author Shyish
  */
-class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListener,
-        InputFilter {
+class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListener, InputFilter {
 
     private var currentFact = FactType.TRIVIA
 
@@ -32,6 +35,8 @@ class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListene
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        factTextView.setMovementMethod(ScrollingMovementMethod());
 
         getFactButton.setOnClickListener { onGetFactButtonClicked() }
         shareButton.setOnClickListener { onShareButtonClicked() }
@@ -43,7 +48,7 @@ class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListene
         numberEditText.addTextChangedListener(this)
     }
 
-    internal fun onGetFactButtonClicked() {
+    private fun onGetFactButtonClicked() {
         val number = numberEditText.text.toString()
         if (number.contains("/") && !validateMDDate(number)) {
             numberEditText.error = getString(R.string.error_date)
@@ -55,6 +60,8 @@ class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListene
                         if (!TextUtils.isEmpty(responseFact.text)) {
                             factTextView.text = responseFact.text
                             shareButton.visibility = View.VISIBLE
+                            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.hideSoftInputFromWindow(numberEditText.getWindowToken(), 0);
                         }
                     }, { throwable ->
                         factTextView.text = ""
@@ -68,14 +75,20 @@ class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListene
         }
     }
 
-    internal fun onShareButtonClicked() {
-        val share = Intent(android.content.Intent.ACTION_SEND)
+    fun requestFocus(view: View) {
+        if (view.requestFocus()) {
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
 
-        share.type = "text/plain"
-        share.putExtra(android.content.Intent.EXTRA_SUBJECT, "Did you know that...?")
-        share.putExtra(android.content.Intent.EXTRA_TEXT, factTextView.text)
+    private fun onShareButtonClicked() {
+        val intent = Intent(android.content.Intent.ACTION_SEND)
 
-        startActivity(Intent.createChooser(share, "Share this fact"))
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Did you know that...?")
+        intent.putExtra(Intent.EXTRA_TEXT, factTextView.text)
+
+        startActivity(Intent.createChooser(intent, "Share this fact"))
     }
 
     /**
@@ -87,7 +100,7 @@ class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListene
         for (i in start..end - 1) {
             val c = source[i]
             //Only allows digits or digits plus the '/' char if the current fact type is DATE
-            if (!(Character.isDigit(c) || currentFact == FactType.DATE && c == '/')) {
+            if (!(Character.isDigit(c) || (currentFact == FactType.DATE && c == '/'))) {
                 return ""
             }
         }
@@ -105,17 +118,13 @@ class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListene
             factTextView.text = ""
             numberEditText.setText("")
         }
-        val radioButtonID = group.checkedRadioButtonId
-        val radioButton = group.findViewById(radioButtonID)
+        val radioButton = group.findViewById(group.checkedRadioButtonId)
         currentFact = FactType.values()[group.indexOfChild(radioButton)]
 
-        if (currentFact == FactType.DATE) {
-            numberEditText.setHint(R.string.write_number_date_hint)
-            numberEditText.inputType = InputType.TYPE_CLASS_TEXT
-        } else {
-            numberEditText.setHint(R.string.write_number_hint)
-            numberEditText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-        }
+        numberEditText.setHint(
+                if (currentFact == FactType.DATE) R.string.write_number_date_hint
+                else R.string.write_number_hint
+        )
     }
 
     /**
@@ -126,10 +135,6 @@ class FactsFragment : Fragment(), TextWatcher, RadioGroup.OnCheckedChangeListene
     override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
             getFactButton.setText(if (s.length > 0) R.string.get_fact else R.string.random_fact)
 
-    override fun afterTextChanged(s: Editable) {
-    }
-
-    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-    }
-
+    override fun afterTextChanged(s: Editable) = Unit
+    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 }

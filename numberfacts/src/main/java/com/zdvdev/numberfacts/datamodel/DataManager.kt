@@ -21,11 +21,11 @@ object DataManager {
         var number = number
         if (TextUtils.isEmpty(number)) number = NUMBER_RANDOM
 
-        val apiManager = CloudDataSource.getApiManager()
+        val apiManager = CloudDataSource.apiManager
         return when (type) {
             FactType.MATH -> apiManager.getMathFact(number)
             FactType.DATE -> if (number.contains("/")) {
-                val dateSplit = number.split("\\/")
+                val dateSplit = number.split("\\/".toRegex())
                 apiManager.getDateFact(dateSplit[0], dateSplit[1])
             } else {
                 apiManager.getDateDaysFact(number)

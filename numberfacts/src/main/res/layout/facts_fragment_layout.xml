@@ -11,9 +11,9 @@
 
     <TextView
         android:id="@+id/typeLabelTextView"
-        android:text="@string/fact_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/fact_label"
         android:textSize="@dimen/text_regular"
         android:textColor="@color/blue_dark"
         android:gravity="center_vertical" />
@@ -23,8 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/typeLabelTextView"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/default_margin">
+        android:layout_marginBottom="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:orientation="horizontal">
 
         <RadioButton
             style="@style/default_wide_button"
@@ -49,52 +50,59 @@
 
     <EditText
         android:id="@+id/numberEditText"
-        android:hint="@string/write_number_hint"
-        android:inputType="numberDecimal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/typeRadioGroup"
         android:layout_alignParentLeft="true"
+        android:hint="@string/write_number_hint"
+        android:inputType="numberDecimal|date"
         android:textColor="@color/blue_dark"
-        android:layout_marginTop="@dimen/default_margin"
-        android:layout_below="@+id/typeRadioGroup" />
+        android:cursorVisible="true"
+        android:textCursorDrawable="@null"
+        tools:ignore="UnusedAttribute"
+        android:layout_toLeftOf="@+id/textView"
+        android:layout_toStartOf="@+id/textView" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/numberEditText"
+        android:layout_alignTop="@+id/numberEditText"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="@dimen/text_small"
-        android:text="@string/label_optional"
-        android:layout_below="@+id/numberEditText"
-        android:layout_alignParentRight="true"
-        android:id="@+id/textView" />
+        android:text="@string/label_optional" />
 
     <TextView
         android:id="@+id/factTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_big"
         android:layout_marginBottom="@dimen/default_margin"
-        android:textColor="@color/blue_dark"
-        tools:text="123546879 is the number of rate of hyperinflation in Zimbabwe by February 2009"
-        android:gravity="center_vertical"
         android:layout_above="@+id/shareButton"
-        android:layout_below="@+id/textView" />
+        android:layout_below="@+id/textView"
+        android:textSize="@dimen/text_big"
+        android:textColor="@color/blue_dark"
+        android:gravity="center_vertical"
+        android:scrollbars="vertical"
+        tools:text="123546879 is the number of rate of hyperinflation in Zimbabwe by February 2009" />
 
     <ImageButton
         android:id="@+id/shareButton"
+        style="@style/default_button"
         android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:layout_above="@+id/getFactButton"
         android:src="@drawable/ic_menu_share"
         android:padding="8dp"
-        android:layout_marginBottom="@dimen/default_margin"
-        style="@style/default_button"
         android:visibility="invisible"
-        android:layout_above="@+id/getFactButton"
         android:contentDescription="@string/cd_share" />
 
     <Button
         android:id="@+id/getFactButton"
-        android:text="@string/random_fact"
         style="@style/default_wide_button"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:text="@string/random_fact" />
 
 </RelativeLayout>

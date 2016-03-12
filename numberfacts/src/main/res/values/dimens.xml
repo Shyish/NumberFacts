@@ -6,6 +6,6 @@
     <dimen name="button_padding">8dp</dimen>
     <dimen name="text_big">21sp</dimen>
     <dimen name="text_regular">18sp</dimen>
-    <dimen name="text_small">12sp</dimen>
+    <dimen name="text_small">11sp</dimen>
 
 </resources>
